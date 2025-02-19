@@ -3,9 +3,10 @@
     "version": "1.0.0",
     "description": "Authentication & Authorization Microservice with OTP",
     "main": "server.js",
-    "scripts": {
-        "start": "nodemon server.js"
-    },
+   "scripts": {
+  "start": "node server.js",
+  "dev": "nodemon server.js"
+},
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",

@@ -1,29 +1,29 @@
 const express = require('express');
 const passport = require('passport');
-const { registerUser, verifyOTP, loginUser, verifyLoginOTP } = require('../controllers/authController');
+const { registerUser, verifyOTP, loginUser, verifyLoginOTP, forgotPassword, resetPassword, changePassword } = require('../controllers/authController');
+const authMiddleware = require('../middlewares/authMiddleware'); 
 
 const router = express.Router();
 
-// Register user
+// Auth Routes
 router.post('/register', registerUser);
-
-// OTP verification for registration
 router.post('/verify-otp', verifyOTP);
-
-// User login
 router.post('/login', loginUser);
-
-// OTP verification for login
 router.post('/verify-login-otp', verifyLoginOTP);
 
-// Google authentication routes
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+// Password Management Routes
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
+router.post('/change-password', authMiddleware, changePassword);
 
-router.get('/google/callback',
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get(
+  '/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
     const token = generateToken(req.user._id);
-    res.redirect(`http://localhost:3000?token=${token}`); //redirect to client with jwt
-  });
+    res.redirect(`http://localhost:3000?token=${token}`);
+  }
+);
 
 module.exports = router;
